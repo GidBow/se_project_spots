@@ -1,21 +1,32 @@
 # Project 3: Spots
 
-### Overview  
+**Intro to Spots**
 
-* Intro  
-* Figma  
-* Images  
-  
-**Intro**
-  
-This project is made so all the elements are displayed correctly on popular screen sizes. We recommend investing more time in completing this project, since it's more difficult than previous ones.  
-  
-**Figma**  
-  
-* [Link to the project on Figma](https://www.figma.com/file/BBNm2bC3lj8QQMHlnqRsga/Sprint-3-Project-%E2%80%94-Spots?type=design&node-id=2%3A60&mode=design&t=afgNFybdorZO6cQo-1)
-  
-**Images**  
-  
-The way you'll do this at work is by exporting images directly from Figma — we recommend doing that to practice more. Don't forget to optimize them [here](https://tinypng.com/), so your project loads faster. 
-  
-Good luck and have fun!
+Spots is a social media site, built so that users can enjoy it on any screen size they choose. It allows for the user to upload pictures and give a brief description along with a heart button. The user is able to upload an image to represent themselves, give their name, and even a little info about themselves if they choose.
+
+Grid as well as flex box was used for layout purposes to create an great experience on the site and ease of use. Media quieres were implemented in order for the site to be responsive allowing for multi device viewability.
+
+### Key Features
+
+- Responsive design (mobile, tablet, desktop)
+- Photo upload capability
+- User profile customization
+- Interactive elements (heart button)
+- Grid and Flexbox layout
+- Cross-device compatibility
+
+### Technologies
+
+- HTML5
+- CSS3 (Grid, Flexbox, Media Queries)
+- BEM Methodology
+
+## Screenshots
+
+![Desktop View](./images/desktopview.png)
+![Tablet View](./images/tabletview.png)
+![Mobile View](./images/mobileview.png)
+
+## GitHub pages link
+
+https://GidBow.github.io/se_project_spots
