@@ -29,7 +29,7 @@ Grid as well as flex box was used for layout purposes to create an great experie
 
 ## GitHub pages link
 
-https://GidBow.github.io/se_project_spots/index.html
+https://GidBow.github.io/se_project_spots
 
 ## Video Link
 
