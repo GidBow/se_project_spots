@@ -80,10 +80,11 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 1;
+  border: none;
+  white-space: nowrap;
 }
 
 .profile__add-btn:hover {
-  color: #fcf5e5;
   opacity: 80%;
   cursor: pointer;
 }
@@ -113,26 +114,20 @@
     font-size: 20px;
     line-height: 1.2;
     font-weight: 500;
-    margin: 0 0 12px;
+    margin: 0;
     max-width: 288px;
   }
 
   .profile__description {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.2;
     margin: 0 0 32px;
     max-width: 288px;
   }
 
   .profile__edit-btn {
-    width: 84px;
-    height: 16px;
     font-size: 16px;
     line-height: 1;
     font-weight: 500;
     gap: 4px;
-    padding: 0 0 20px;
   }
 
   .profile__add-btn {
