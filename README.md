@@ -33,4 +33,4 @@ https://GidBow.github.io/se_project_spots
 
 ## Video Link
 
-https://1drv.ms/v/c/f55d112818180562/EV-4iiYvZl1HkrmCExgh8RUBzpwN7fYzhtz85lHO3kzcjg?e=Cge0co
+https://drive.google.com/file/d/1zMFm7I0P88DVCwbuk_suaZ-Is6zeXL8w/view?usp=drive_link
