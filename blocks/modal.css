@@ -10,7 +10,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 
 .modal_opened {
@@ -134,7 +134,7 @@
   }
 
   .modal__label {
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 24px;
   }
 
