@@ -1,0 +1,149 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+.modal_opened {
+  visibility: visible;
+}
+
+.modal__container {
+  background-color: #fff;
+  padding: 32px 50px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 730px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  box-sizing: border-box;
+  gap: 32px;
+  font-family: "Poppins", arial, sans-serif;
+}
+
+.modal__close-btn {
+  position: absolute;
+  top: 32px;
+  right: 50px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: 2px;
+  cursor: pointer;
+  background-image: url(../images/close.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  transition: background-color 0.3s;
+  opacity: 0.4;
+}
+
+.modal__close-btn:hover {
+  opacity: 1;
+}
+
+.modal__title {
+  margin: 0 0 32px;
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 20px;
+  font-family: "Poppins", arial, sans-serif;
+  font-weight: 500;
+}
+
+.modal__label {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+  color: rgba(33, 33, 33, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+  font-family: "Poppins", arial, sans-serif;
+}
+
+.modal__input {
+  display: flex;
+  gap: 10px;
+  padding: 16px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(33, 33, 33, 0.4);
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 500;
+  color: #212121;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  font-family: "Poppins", arial, sans-serif;
+}
+
+.modal__input:hover {
+  border-color: rgba(33, 33, 33, 1);
+}
+
+.modal__input:filled {
+  border-color: rgba(33, 33, 33, 0.4);
+}
+
+.modal__submit-btn {
+  width: 156px;
+  padding: 18px 0;
+  background-color: #212121;
+  border-radius: 8px;
+  border: none;
+  color: #fcf5e5;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 627px) {
+  .modal {
+    padding: 0 10px;
+  }
+
+  .modal__container {
+    padding: 12px;
+  }
+
+  .modal__title {
+    font-size: 20px;
+    margin: 10px 0 34px;
+  }
+
+  .modal__close-btn {
+    top: 12px;
+    right: 12px;
+  }
+
+  .modal__label {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .modal__input {
+    padding: 12px 8px;
+    font-size: 16px;
+  }
+
+  .modal__submit-btn {
+    width: 100%;
+  }
+}
