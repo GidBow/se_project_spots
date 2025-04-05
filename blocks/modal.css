@@ -10,10 +10,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* visibility: hidden; */
+  visibility: hidden;
 }
 
-.modal_opened {
+.modal_is-opened {
   visibility: visible;
 }
 
