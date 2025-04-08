@@ -2,6 +2,7 @@ const editProfileBtn = document.querySelector(".profile__edit-btn");
 const editProfileModal = document.querySelector("#edit-profile-modal");
 const editProfileCloseBtn = editProfileModal.querySelector(".modal__close-btn");
 const editProfileForm = editProfileModal.querySelector(".modal__form");
+// I'm not sure I understand what you meant in the comment on the editProfileForm.
 
 const editProfileNameInput = editProfileModal.querySelector(
   "#profile_name_input"
@@ -21,14 +22,27 @@ const linkInput = addCardFormElement.querySelector("#image-link");
 const profileNameEL = document.querySelector(".profile__name");
 const profileDescriptionEL = document.querySelector(".profile__description");
 
+// Function to open the modal
+function openModal(modal) {
+  modal.classList.add("modal_is-opened");
+}
+
+// Find all close buttons
+const closeButtons = document.querySelectorAll(".modal__close-btn");
+
+closeButtons.forEach((button) => {
+  // Find the closest popup only once
+  const popup = button.closest(".modal");
+  // Set the listener
+  button.addEventListener("click", () => closePopup(popup));
+});
+
 function handleAddCardSubmit(evt) {
   // Prevent default browser behavior.
   evt.preventDefault();
   // Log both input values to the console.
   console.log(captionInput.value);
   console.log(linkInput.value);
-  // Close the modal.
-  newPostModal.classList.remove("modal_is-opened");
 }
 
 // Create the submit listener.
@@ -40,20 +54,12 @@ editProfileBtn.addEventListener("click", function () {
   editProfileNameInput.value = profileNameEL.textContent;
   editProfileDescriptionInput.value = profileDescriptionEL.textContent;
   // Open the modal
-  editProfileModal.classList.add("modal_is-opened");
-});
-// Close the modal when the close button is clicked
-editProfileCloseBtn.addEventListener("click", function () {
-  editProfileModal.classList.remove("modal_is-opened");
+  openModal(editProfileModal);
 });
 
 // Open the modal when the button is clicked
 newPostBtn.addEventListener("click", function () {
-  newPostModal.classList.add("modal_is-opened");
-});
-// Close the modal when the close button is clicked
-newPostCloseBtn.addEventListener("click", function () {
-  newPostModal.classList.remove("modal_is-opened");
+  openModal(newPostModal);
 });
 
 // Assign form input values to profile name and description
@@ -61,7 +67,6 @@ function handleEditProfileSubmit(e) {
   e.preventDefault(); // Prevent the default form submission behavior
   profileNameEL.textContent = editProfileNameInput.value;
   profileDescriptionEL.textContent = editProfileDescriptionInput.value;
-  editProfileModal.classList.remove("modal_is-opened"); // Close the modal
 }
 
 editProfileForm.addEventListener("submit", handleEditProfileSubmit);
