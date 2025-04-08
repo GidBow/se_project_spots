@@ -1,8 +1,7 @@
 const editProfileBtn = document.querySelector(".profile__edit-btn");
 const editProfileModal = document.querySelector("#edit-profile-modal");
 const editProfileCloseBtn = editProfileModal.querySelector(".modal__close-btn");
-const editProfileForm = editProfileModal.querySelector(".modal__form");
-// I'm not sure I understand what you meant in the comment on the editProfileForm.
+const editProfileForm = document.forms["edit-profile"];
 
 const editProfileNameInput = editProfileModal.querySelector(
   "#profile_name_input"
@@ -24,7 +23,11 @@ const profileDescriptionEL = document.querySelector(".profile__description");
 
 // Function to open the modal
 function openModal(modal) {
-  modal.classList.add("modal_is-opened");
+  modal.classList.add("modal_opened");
+}
+// Function to close the modal
+function closeModal(modal) {
+  modal.classList.remove("modal_opened");
 }
 
 // Find all close buttons
@@ -34,7 +37,7 @@ closeButtons.forEach((button) => {
   // Find the closest popup only once
   const popup = button.closest(".modal");
   // Set the listener
-  button.addEventListener("click", () => closePopup(popup));
+  button.addEventListener("click", () => closeModal(popup));
 });
 
 function handleAddCardSubmit(evt) {
@@ -43,6 +46,7 @@ function handleAddCardSubmit(evt) {
   // Log both input values to the console.
   console.log(captionInput.value);
   console.log(linkInput.value);
+  closeModal(newPostModal);
 }
 
 // Create the submit listener.
@@ -67,6 +71,7 @@ function handleEditProfileSubmit(e) {
   e.preventDefault(); // Prevent the default form submission behavior
   profileNameEL.textContent = editProfileNameInput.value;
   profileDescriptionEL.textContent = editProfileDescriptionInput.value;
+  closeModal(editProfileModal); // Close the modal
 }
 
 editProfileForm.addEventListener("submit", handleEditProfileSubmit);
