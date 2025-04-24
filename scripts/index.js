@@ -1,41 +1,3 @@
-const initialCards = [
-  {
-    name: "Golden Gate Bridge",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/7-photo-by-griffin-wooldridge-from-pexels.jpg",
-  },
-  {
-    name: "Val Thorens",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
-  {
-    name: "Restaurant terrace",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
-  },
-  {
-    name: "An outdoor cafe",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
-  },
-  {
-    name: "A very long bridge, over the forest and through the trees",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
-  },
-  {
-    name: "Tunnel with morning light",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
-  },
-  {
-    name: "Mountain house",
-    image:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
-];
-
 const cardTemplate = document.querySelector("#card-template").content;
 const cardList = document.querySelector(".cards__list");
 
@@ -125,6 +87,8 @@ function handleAddCardSubmit(evt) {
   addCardFormElement.reset();
   closeModal(newPostModal);
 }
+// Add event listener to the add card form
+addCardFormElement.addEventListener("submit", handleAddCardSubmit);
 
 // Function to open the preview modal
 function openPreviewModal(image, caption) {
@@ -137,15 +101,6 @@ function openPreviewModal(image, caption) {
 function closePreviewModal() {
   closeModal(previewImageModal);
 }
-// Add event listener to the preview close button
-previewCloseBtn.addEventListener("click", closePreviewModal);
-// Add event listener to the card image elements
-
-// Add event listener to the preview image
-previewImage.addEventListener("click", closePreviewModal);
-
-// Create the submit listener.
-addCardFormElement.addEventListener("submit", handleAddCardSubmit);
 
 function getCardElement(data) {
   // Clone the template
@@ -181,7 +136,16 @@ function getCardElement(data) {
   return cardElement;
 }
 
+// Is this what you were talking about changing?
+
 initialCards.forEach(function (item) {
   const cardElement = getCardElement(item);
   cardList.append(cardElement);
 });
+// Change to this?
+//   function renderCard(item, method = "append") {
+//     const cardElement = getCardElement(item);
+//     cardList[method](cardElement);
+//   }
+// });
+// When I tried chagning it, the site stopped working so I dont think I understand what I am suppose to do.

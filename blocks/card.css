@@ -27,6 +27,10 @@
   display: block;
 }
 
+.card__image:hover {
+  cursor: pointer;
+}
+
 .card__content {
   margin: 12px 0 0;
   font-size: 16px;
@@ -62,6 +66,7 @@
 
 .card__like-btn_active:hover {
   opacity: 40%;
+  cursor: pointer;
 }
 
 .card__delete-btn {
