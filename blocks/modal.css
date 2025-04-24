@@ -67,7 +67,7 @@
 
 .modal__close-btn {
   position: absolute;
-  top: -40px;
+  top: -30px;
   right: -40px;
   width: 40px;
   height: 40px;
@@ -84,6 +84,18 @@
 
 .modal__close-btn:hover {
   opacity: 1;
+}
+
+#preview-modal .modal__close-btn {
+  background-image: url(../images/close-light.svg);
+  top: -40px;
+  right: -40px;
+  opacity: 1;
+}
+
+#preview-modal .modal__close-btn:hover {
+  opacity: 0.4;
+  cursor: pointer;
 }
 
 .modal__title {

@@ -10,7 +10,7 @@ const editProfileNameInput = editProfileModal.querySelector(
   "#profile_name_input"
 );
 const editProfileDescriptionInput = editProfileModal.querySelector(
-  "#profile-description-input"
+  "#profile_description_input"
 );
 
 const newPostBtn = document.querySelector(".profile__add-btn");
