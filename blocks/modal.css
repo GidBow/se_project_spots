@@ -67,8 +67,8 @@
 
 .modal__close-btn {
   position: absolute;
-  top: -30px;
-  right: -40px;
+  top: 32px;
+  right: 50px;
   width: 40px;
   height: 40px;
   background-color: transparent;
@@ -202,8 +202,8 @@
   .modal__close-btn {
     width: 20px;
     height: 20px;
-    top: -36px;
-    right: -36px;
+    top: 12px;
+    right: 12px;
   }
 
   #preview-modal .modal__close-btn {
