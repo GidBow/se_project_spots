@@ -164,6 +164,16 @@
   opacity: 0.8;
 }
 
+.modal__input-error {
+  /* change to correct color and font size */
+  color: rgba(255, 0, 0, 0.7);
+  font-weight: 500;
+  font-size: 16px;
+  width: 630px;
+  height: 18px;
+  margin-top: 8px;
+}
+
 @media screen and (max-width: 627px) {
   .modal {
     padding: 0 10px;
