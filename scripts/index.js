@@ -1,6 +1,6 @@
 const cardTemplate = document.querySelector("#card-template").content;
 const cardList = document.querySelector(".cards__list");
-
+//profile elements
 const editProfileBtn = document.querySelector(".profile__edit-btn");
 const editProfileModal = document.querySelector("#edit-profile-modal");
 const editProfileCloseBtn = editProfileModal.querySelector(".modal__close-btn");
@@ -13,6 +13,7 @@ const editProfileDescriptionInput = editProfileModal.querySelector(
   "#profile_description_input"
 );
 
+//card form elements
 const newPostBtn = document.querySelector(".profile__add-btn");
 const newPostModal = document.querySelector("#new-post-modal");
 const newPostCloseBtn = newPostModal.querySelector(".modal__close-btn");
@@ -23,14 +24,16 @@ const addCardFormElement = document.querySelector(
 const captionInput = addCardFormElement.querySelector("#caption-input");
 const linkInput = addCardFormElement.querySelector("#image-link");
 const addCardBtn = newPostModal.querySelector(".modal__save-btn");
-
+//profile elements
 const profileNameEL = document.querySelector(".profile__name");
 const profileDescriptionEL = document.querySelector(".profile__description");
+//preview modal elements
 
 const previewImageModal = document.querySelector("#preview-modal");
 const previewImage = previewImageModal.querySelector(".modal__preview-image");
 const previewCaption = previewImageModal.querySelector(".modal__caption");
 const previewCloseBtn = previewImageModal.querySelector(".modal__close-btn");
+const cardSubmitBtn = document.querySelector(".modal__submit-btn");
 
 // Function to open the modal
 function openModal(modal) {
@@ -56,13 +59,37 @@ editProfileBtn.addEventListener("click", function () {
   // Get the current profile name and description
   editProfileNameInput.value = profileNameEL.textContent;
   editProfileDescriptionInput.value = profileDescriptionEL.textContent;
+
+  resetValidation(editProfileForm, [
+    editProfileNameInput,
+    editProfileDescriptionInput,
+  ]);
   // Open the modal
   openModal(editProfileModal);
 });
 
 // Open the modal when the button is clicked
 newPostBtn.addEventListener("click", function () {
+  resetValidation(addCardFormElement, [captionInput, linkInput]);
   openModal(newPostModal);
+});
+
+// For the new post modal close button
+newPostModal
+  .querySelector(".modal__close-btn")
+  .addEventListener("click", () => {
+    addCardFormElement.reset();
+    resetValidation(addCardFormElement, [captionInput, linkInput]);
+    closeModal(newPostModal);
+  });
+
+// For the new post modal overlay click
+newPostModal.addEventListener("mousedown", (evt) => {
+  if (evt.target.classList.contains("modal")) {
+    addCardFormElement.reset();
+    resetValidation(addCardFormElement, [captionInput, linkInput]);
+    closeModal(newPostModal);
+  }
 });
 
 // Assign form input values to profile name and description
@@ -85,6 +112,8 @@ function handleAddCardSubmit(evt) {
   });
   cardList.prepend(cardElement);
   addCardFormElement.reset();
+  resetValidation(addCardFormElement, [captionInput, linkInput]);
+  disableButton(cardSubmitBtn);
   closeModal(newPostModal);
 }
 // Add event listener to the add card form
@@ -136,16 +165,7 @@ function getCardElement(data) {
   return cardElement;
 }
 
-// Is this what you were talking about changing?
-
 initialCards.forEach(function (item) {
   const cardElement = getCardElement(item);
   cardList.append(cardElement);
 });
-// Change to this?
-//   function renderCard(item, method = "append") {
-//     const cardElement = getCardElement(item);
-//     cardList[method](cardElement);
-//   }
-// });
-// When I tried chagning it, the site stopped working so I dont think I understand what I am suppose to do.
