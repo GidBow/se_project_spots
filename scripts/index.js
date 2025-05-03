@@ -60,17 +60,14 @@ editProfileBtn.addEventListener("click", function () {
   editProfileNameInput.value = profileNameEL.textContent;
   editProfileDescriptionInput.value = profileDescriptionEL.textContent;
 
-  resetValidation(editProfileForm, [
-    editProfileNameInput,
-    editProfileDescriptionInput,
-  ]);
+  resetValidation(editProfileForm, settings);
   // Open the modal
   openModal(editProfileModal);
 });
 
 // Open the modal when the button is clicked
 newPostBtn.addEventListener("click", function () {
-  resetValidation(addCardFormElement, [captionInput, linkInput]);
+  resetValidation(addCardFormElement, settings);
   openModal(newPostModal);
 });
 
@@ -79,7 +76,7 @@ newPostModal
   .querySelector(".modal__close-btn")
   .addEventListener("click", () => {
     addCardFormElement.reset();
-    resetValidation(addCardFormElement, [captionInput, linkInput]);
+    resetValidation(addCardFormElement, settings);
     closeModal(newPostModal);
   });
 
@@ -87,7 +84,7 @@ newPostModal
 newPostModal.addEventListener("mousedown", (evt) => {
   if (evt.target.classList.contains("modal")) {
     addCardFormElement.reset();
-    resetValidation(addCardFormElement, [captionInput, linkInput]);
+    resetValidation(addCardFormElement, settings);
     closeModal(newPostModal);
   }
 });
@@ -112,8 +109,8 @@ function handleAddCardSubmit(evt) {
   });
   cardList.prepend(cardElement);
   addCardFormElement.reset();
-  resetValidation(addCardFormElement, [captionInput, linkInput]);
-  disableButton(cardSubmitBtn);
+  resetValidation(addCardFormElement, settings);
+  disableButton(cardSubmitBtn, settings);
   closeModal(newPostModal);
 }
 // Add event listener to the add card form

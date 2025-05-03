@@ -59,21 +59,24 @@ function toggleButtonState(inputList, buttonElement, config) {
 }
 
 const disableButton = (buttonElement, config) => {
-  buttonElement.disabled = true;
   //add a modifier class the buttonElement and make it grey dont forget css
   buttonElement.classList.add(config.inactiveButtonClass);
-  buttonElement.classList.remove("modal__button_active");
+  // buttonElement.classList.remove("modal__button_active");
+  buttonElement.disabled = true;
 };
 const enableButton = (buttonElement, config) => {
   buttonElement.disabled = false;
   //remove the disabled class
   buttonElement.classList.remove(config.inactiveButtonClass);
-  buttonElement.classList.add("modal__button_active");
+  // buttonElement.classList.add("modal__button_active");
 };
 
-const resetValidation = (formElement, inputList) => {
+const resetValidation = (formElement, config) => {
+  const inputList = Array.from(
+    formElement.querySelectorAll(config.inputSelector)
+  );
   inputList.forEach((inputElement) => {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, config);
   });
 };
 
