@@ -59,7 +59,6 @@ editProfileBtn.addEventListener("click", function () {
   // Get the current profile name and description
   editProfileNameInput.value = profileNameEL.textContent;
   editProfileDescriptionInput.value = profileDescriptionEL.textContent;
-  editProfileForm.reset();
   resetValidation(editProfileForm, settings);
   // Open the modal
   openModal(editProfileModal);
@@ -67,29 +66,17 @@ editProfileBtn.addEventListener("click", function () {
 
 // Open the modal when the button is clicked
 newPostBtn.addEventListener("click", function () {
-  addCardFormElement.reset();
-  resetValidation(addCardFormElement, settings);
-  disableButton(cardSubmitBtn, settings);
   openModal(newPostModal);
 });
 
 // For the new post modal close button
-newPostModal
-  .querySelector(".modal__close-btn")
-  .addEventListener("click", () => {
-    addCardFormElement.reset();
-    resetValidation(addCardFormElement, settings);
-
-    closeModal(newPostModal);
-  });
+newPostModal.querySelector(".modal__close-btn");
+closeModal(newPostModal);
+// });
 
 // For the new post modal overlay click
 newPostModal.addEventListener("mousedown", (evt) => {
   if (evt.target.classList.contains("modal")) {
-    addCardFormElement.reset();
-    disableButton(cardSubmitBtn, settings);
-    resetValidation(addCardFormElement, settings);
-
     closeModal(newPostModal);
   }
 });
@@ -99,9 +86,7 @@ function handleEditProfileSubmit(e) {
   e.preventDefault(); // Prevent the default form submission behavior
   profileNameEL.textContent = editProfileNameInput.value;
   profileDescriptionEL.textContent = editProfileDescriptionInput.value;
-  editProfileForm.reset(); // Reset the form
 
-  resetValidation(editProfileForm, settings); // Reset validation
   disableButton(editProfileForm.querySelector(".modal__submit-btn"), settings); // Disable the submit button
 
   closeModal(editProfileModal); // Close the modal
@@ -112,21 +97,20 @@ editProfileForm.addEventListener("submit", handleEditProfileSubmit);
 function handleAddCardSubmit(evt) {
   // Prevent default browser behavior.
   evt.preventDefault();
-
-  const cardElement = getCardElement({
-    name: captionInput.value,
-    image: linkInput.value,
-  });
-  cardList.prepend(cardElement);
+  renderCard(
+    {
+      name: captionInput.value,
+      image: linkInput.value,
+    },
+    "prepend"
+  );
   addCardFormElement.reset();
-  resetValidation(addCardFormElement, settings);
   disableButton(cardSubmitBtn, settings);
   closeModal(newPostModal);
 }
 
 editProfileModal.addEventListener("mousedown", (evt) => {
   if (evt.target.classList.contains("modal")) {
-    editProfileForm.reset();
     resetValidation(editProfileForm, settings);
     disableButton(
       editProfileForm.querySelector(".modal__submit-btn"),
@@ -139,16 +123,18 @@ editProfileModal.addEventListener("mousedown", (evt) => {
 // Add event listener to the add card form
 addCardFormElement.addEventListener("submit", handleAddCardSubmit);
 
+previewImageModal.addEventListener("mousedown", (evt) => {
+  if (evt.target.classList.contains("modal")) {
+    closeModal(previewImageModal);
+  }
+});
+
 // Function to open the preview modal
 function openPreviewModal(image, caption) {
   previewImage.src = image;
   previewImage.alt = caption;
   previewCaption.textContent = caption;
   openModal(previewImageModal);
-}
-// Function to close the preview modal
-function closePreviewModal() {
-  closeModal(previewImageModal);
 }
 
 function getCardElement(data) {
@@ -185,7 +171,19 @@ function getCardElement(data) {
   return cardElement;
 }
 
-initialCards.forEach(function (item) {
+function renderCard(item, method = "append") {
   const cardElement = getCardElement(item);
-  cardList.append(cardElement);
+  cardList[method](cardElement);
+}
+
+initialCards.forEach(function (item) {
+  renderCard(item);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeModal(editProfileModal);
+    closeModal(newPostModal);
+    closeModal(previewImageModal);
+  }
 });

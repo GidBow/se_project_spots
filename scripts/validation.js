@@ -2,7 +2,7 @@ const settings = {
   formSelector: ".modal__container",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__submit-btn",
-  inactiveButtonClass: "modal__button_disabled",
+  inactiveButtonClass: "modal__submit-btn_disabled",
   inputErrorClass: "modal__input_type_error",
   errorClass: "modal__error_visible",
 };
@@ -20,11 +20,12 @@ const setEventListeners = (formElement, config) => {
   );
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
-  // formElement.addEventListener("submit", (evt) => {
-  //   evt.preventDefault();
-  // });
-
   toggleButtonState(inputList, buttonElement, config);
+
+  // Disable the button when the form is reset
+  formElement.addEventListener("reset", () => {
+    disableButton(buttonElement, config);
+  });
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
@@ -61,14 +62,13 @@ function toggleButtonState(inputList, buttonElement, config) {
 const disableButton = (buttonElement, config) => {
   //add a modifier class the buttonElement and make it grey dont forget css
   buttonElement.classList.add(config.inactiveButtonClass);
-  // buttonElement.classList.remove("modal__button_active");
+
   buttonElement.disabled = true;
 };
 const enableButton = (buttonElement, config) => {
   buttonElement.disabled = false;
   //remove the disabled class
   buttonElement.classList.remove(config.inactiveButtonClass);
-  // buttonElement.classList.add("modal__button_active");
 };
 
 const resetValidation = (formElement, config) => {
@@ -81,7 +81,6 @@ const resetValidation = (formElement, config) => {
 };
 
 const checkInputValidity = (formElement, inputElement, config) => {
-  // const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   if (!inputElement.validity.valid) {
     showInputError(
       formElement,
@@ -93,9 +92,5 @@ const checkInputValidity = (formElement, inputElement, config) => {
     hideInputError(formElement, inputElement, config);
   }
 };
-
-// buttonElement.addEventListener("click", function () {
-// toggleButtonState(inputList, buttonElement);
-// });
 
 enableValidation(settings);

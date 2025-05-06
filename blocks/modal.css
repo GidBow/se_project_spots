@@ -169,7 +169,6 @@
   font-weight: 500;
   font-size: 16px;
   width: 630px;
-  height: 18px;
   margin-top: 8px;
 }
 
@@ -177,7 +176,7 @@
   border: 1px solid rgba(255, 0, 0, 0.7);
 }
 
-.modal__button_disabled {
+.modal__submit-btn_disabled {
   background-color: rgba(33, 33, 33, 0.5);
   cursor: not-allowed;
 }
