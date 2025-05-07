@@ -38,10 +38,12 @@ const previewCloseBtn = previewImageModal.querySelector(".modal__close-btn");
 // Function to open the modal
 function openModal(modal) {
   modal.classList.add("modal_opened");
+  document.addEventListener("keydown", handleEscape);
 }
 // Function to close the modal
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
+  document.removeEventListener("keydown", handleEscape);
 }
 
 // Find all close buttons
@@ -68,11 +70,6 @@ editProfileBtn.addEventListener("click", function () {
 newPostBtn.addEventListener("click", function () {
   openModal(newPostModal);
 });
-
-// For the new post modal close button
-newPostModal.querySelector(".modal__close-btn");
-closeModal(newPostModal);
-// });
 
 // For the new post modal overlay click
 newPostModal.addEventListener("mousedown", (evt) => {
@@ -111,11 +108,6 @@ function handleAddCardSubmit(evt) {
 
 editProfileModal.addEventListener("mousedown", (evt) => {
   if (evt.target.classList.contains("modal")) {
-    resetValidation(editProfileForm, settings);
-    disableButton(
-      editProfileForm.querySelector(".modal__submit-btn"),
-      settings
-    );
     closeModal(editProfileModal);
   }
 });
@@ -162,9 +154,7 @@ function getCardElement(data) {
   });
 
   cardImageEl.addEventListener("click", () => {
-    const caption = cardImageEl
-      .closest(".card")
-      .querySelector(".card__title").textContent;
+    const caption = cardTitleEl.textContent;
     openPreviewModal(cardImageEl.src, caption);
   });
 
@@ -180,10 +170,11 @@ initialCards.forEach(function (item) {
   renderCard(item);
 });
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeModal(editProfileModal);
-    closeModal(newPostModal);
-    closeModal(previewImageModal);
+function handleEscape(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".modal_opened");
+    if (openedPopup) {
+      closeModal(openedPopup);
+    }
   }
-});
+}
