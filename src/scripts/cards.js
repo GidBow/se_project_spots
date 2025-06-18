@@ -1,4 +1,4 @@
-const initialCards = [
+export const initialCards = [
   {
     name: "Golden Gate Bridge",
     image:

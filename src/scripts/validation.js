@@ -1,4 +1,4 @@
-const settings = {
+export const settings = {
   formSelector: ".modal__container",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__submit-btn",
@@ -7,7 +7,7 @@ const settings = {
   errorClass: "modal__error_visible",
 };
 
-const enableValidation = (config) => {
+export const enableValidation = (config) => {
   const formList = document.querySelectorAll(config.formSelector);
   formList.forEach((formElement) => {
     setEventListeners(formElement, config);
@@ -59,7 +59,7 @@ function toggleButtonState(inputList, buttonElement, config) {
   }
 }
 
-const disableButton = (buttonElement, config) => {
+export const disableButton = (buttonElement, config) => {
   //add a modifier class the buttonElement and make it grey dont forget css
   buttonElement.classList.add(config.inactiveButtonClass);
 
@@ -71,7 +71,7 @@ const enableButton = (buttonElement, config) => {
   buttonElement.classList.remove(config.inactiveButtonClass);
 };
 
-const resetValidation = (formElement, config) => {
+export const resetValidation = (formElement, config) => {
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputSelector)
   );

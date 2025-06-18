@@ -1,3 +1,24 @@
+import "../pages/index.css";
+import logoSrc from "../images/logo.svg";
+import avatarSrc from "../images/avatar.jpg";
+import pencilSrc from "../images/pencil.svg";
+import plusSignSrc from "../images/plus-sign.svg";
+
+import { enableValidation, settings } from "../scripts/validation.js";
+import { initialCards } from "../scripts/cards.js";
+import { disableButton, resetValidation } from "../scripts/validation.js";
+
+import Api from "../scripts/Api.js";
+
+const logoImage = document.getElementById("logo");
+logoImage.src = logoSrc;
+const avatarImage = document.getElementById("avatar");
+avatarImage.src = avatarSrc;
+const pencilImage = document.getElementById("pencil");
+pencilImage.src = pencilSrc;
+const plusSignImage = document.getElementById("plus-sign");
+plusSignImage.src = plusSignSrc;
+
 const cardTemplate = document.querySelector("#card-template").content;
 const cardList = document.querySelector(".cards__list");
 //profile elements
@@ -34,6 +55,36 @@ const previewImageModal = document.querySelector("#preview-modal");
 const previewImage = previewImageModal.querySelector(".modal__preview-image");
 const previewCaption = previewImageModal.querySelector(".modal__caption");
 const previewCloseBtn = previewImageModal.querySelector(".modal__close-btn");
+
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "d321f5b5-1857-422e-ae16-202feee0f36a",
+    "Content-Type": "application/json",
+  },
+});
+
+api
+  .getInitialCards()
+  .then((cards) => {
+    cards.forEach((item) => {
+      renderCard(item);
+    });
+  })
+  .catch((err) => {
+    console.error("Error fetching initial cards:", err);
+  });
+
+api
+  .getUserInfo()
+  .then((userInfo) => {
+    profileNameEL.textContent = userInfo.name;
+    profileDescriptionEL.textContent = userInfo.about;
+    avatarImage.src = userInfo.avatar;
+  })
+  .catch((err) => {
+    console.error("Error fetching user info:", err);
+  });
 
 // Function to open the modal
 function openModal(modal) {
@@ -81,12 +132,25 @@ newPostModal.addEventListener("mousedown", (evt) => {
 // Assign form input values to profile name and description
 function handleEditProfileSubmit(e) {
   e.preventDefault(); // Prevent the default form submission behavior
-  profileNameEL.textContent = editProfileNameInput.value;
-  profileDescriptionEL.textContent = editProfileDescriptionInput.value;
+  api
+    .updateUserInfo(
+      editProfileNameInput.value,
+      editProfileDescriptionInput.value
+    )
+    .then((value) => {
+      profileNameEL.textContent = editProfileNameInput.value;
+      profileDescriptionEL.textContent = editProfileDescriptionInput.value;
 
-  disableButton(editProfileForm.querySelector(".modal__submit-btn"), settings); // Disable the submit button
+      disableButton(
+        editProfileForm.querySelector(".modal__submit-btn"),
+        settings
+      ); // Disable the submit button
 
-  closeModal(editProfileModal); // Close the modal
+      closeModal(editProfileModal); // Close the modal
+    })
+    .catch((err) => {
+      console.error("Error updating user info:", err);
+    });
 }
 
 editProfileForm.addEventListener("submit", handleEditProfileSubmit);
@@ -178,3 +242,5 @@ function handleEscape(evt) {
     }
   }
 }
+
+enableValidation(settings);
