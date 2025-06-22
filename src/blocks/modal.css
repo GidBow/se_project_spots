@@ -34,8 +34,7 @@
   gap: 32px;
   font-family: "Poppins", arial, sans-serif;
 }
-
-.modal__content {
+n .modal__content {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -179,6 +178,27 @@
 .modal__submit-btn_disabled {
   background-color: rgba(33, 33, 33, 0.5);
   cursor: not-allowed;
+}
+
+.modal__delete-btn {
+  top: 18px;
+  right: 32px;
+  width: 156px;
+  height: 52px;
+  background-color: rgba(255, 101, 101, 1);
+  border: none;
+  cursor: pointer;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.modal__cancel-btn {
+  width: 156px;
+  height: 52px;
+  border-radius: 8px;
+  border-color: rgba(33, 33, 33, 1);
+  padding: 18px, 32px;
+  gap: 8px;
 }
 
 @media screen and (max-width: 627px) {

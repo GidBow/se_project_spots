@@ -33,6 +33,14 @@ class Api {
       return Promise.reject(`Error: ${res.status}`);
     });
   }
+
+  // getAllData() {
+  //   return Promise.all([
+  //     this.getUserInfo(), // First API call
+  //     this.getInitialCards(), // Second API call
+  //   ]);
+  // }
+
   updateUserInfo(name, about) {
     return fetch(this._baseUrl + "/users/me", {
       method: "PATCH",
@@ -51,7 +59,7 @@ class Api {
   }
 
   updateUserAvatar(avatar) {
-    return fetch(this._baseUrl + "/users/me/avatar", {
+    return fetch(this._baseUrl + `/users/me/${avatar}`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
@@ -66,7 +74,7 @@ class Api {
     });
   }
 
-  addNewCard(name, link) {
+  addNewCard({ name, link }) {
     return fetch(this._baseUrl + "/cards", {
       method: "POST",
       headers: this._headers,
@@ -83,8 +91,8 @@ class Api {
     });
   }
 
-  deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+  deleteCard({ cardId }) {
+    return fetch(this._baseUrl + `/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
     }).then((res) => {
@@ -96,9 +104,22 @@ class Api {
     });
   }
 
-  toggleLike(cardId, isLiked) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-      method: isLiked ? "DELETE" : "PUT",
+  isLiked(cardId) {
+    return fetch(this._baseUrl + `/cards/${cardId}/likes`, {
+      method: "PUT",
+      headers: this._headers,
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      // if the server returns an error, reject the promise
+      return Promise.reject(`Error: ${res.status}`);
+    });
+  }
+
+  removeLike(cardId) {
+    return fetch(this._baseUrl + `/cards/${cardId}/likes`, {
+      method: "DELETE",
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {

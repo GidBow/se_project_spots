@@ -65,25 +65,27 @@ const api = new Api({
 });
 
 api
-  .getInitialCards()
-  .then((cards) => {
-    cards.forEach((item) => {
-      renderCard(item);
-    });
-  })
-  .catch((err) => {
-    console.error("Error fetching initial cards:", err);
-  });
-
-api
   .getUserInfo()
   .then((userInfo) => {
+    // Render the user info
     profileNameEL.textContent = userInfo.name;
     profileDescriptionEL.textContent = userInfo.about;
     avatarImage.src = userInfo.avatar;
   })
   .catch((err) => {
     console.error("Error fetching user info:", err);
+  });
+
+api
+  .getInitialCards()
+  .then((cards) => {
+    // Render the initial cards
+    cards.forEach((card) => {
+      renderCard(card);
+    });
+  })
+  .catch((err) => {
+    console.error("Error fetching initial cards:", err);
   });
 
 // Function to open the modal
@@ -158,16 +160,18 @@ editProfileForm.addEventListener("submit", handleEditProfileSubmit);
 function handleAddCardSubmit(evt) {
   // Prevent default browser behavior.
   evt.preventDefault();
-  renderCard(
-    {
-      name: captionInput.value,
-      image: linkInput.value,
-    },
-    "prepend"
-  );
-  addCardFormElement.reset();
-  disableButton(cardSubmitBtn, settings);
-  closeModal(newPostModal);
+  api
+    .addNewCard({ name: captionInput.value, link: linkInput.value })
+    .then((data) => {
+      // Render the new card
+      renderCard(data);
+      addCardFormElement.reset();
+      disableButton(cardSubmitBtn, settings);
+      closeModal(newPostModal);
+    })
+    .catch((err) => {
+      console.error("Error adding new card", err);
+    });
 }
 
 editProfileModal.addEventListener("mousedown", (evt) => {
@@ -193,28 +197,59 @@ function openPreviewModal(image, caption) {
   openModal(previewImageModal);
 }
 
+const deleteModal = document.querySelector("#delete-card-modal");
+
+const deleteForm = document.forms["delete-conf-form"];
+const deleteConfBtn = deleteForm.querySelector(".modal__delete-btn");
+let cardToDelete;
+let cardIdToDelete;
+
 function getCardElement(data) {
-  // Clone the template
-  const cardElement = cardTemplate.cloneNode(true);
   // Find the elements inside the template
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImageEl = cardElement.querySelector(".card__image");
   const cardTitleEl = cardElement.querySelector(".card__title");
+  const cardDeleteBtn = cardElement.querySelector(".card__delete-btn");
+  const cardLikeBtn = cardElement.querySelector(".card__like-btn");
   // Set the image and title
-  cardImageEl.src = data.image;
+  cardImageEl.src = data.link;
   cardImageEl.alt = data.name;
   cardTitleEl.textContent = data.name;
 
-  const cardLikeBtn = cardElement.querySelector(".card__like-btn");
-  cardLikeBtn.addEventListener("click", () => {
-    // Toggle the active class on the button
-    cardLikeBtn.classList.toggle("card__like-btn_active");
+  previewImageModal.addEventListener("mousedown", (evt) => {
+    if (evt.target.classList.contains("modal")) {
+      closeModal(previewImageModal);
+    }
   });
 
-  const cardDeleteBtn = cardElement.querySelector(".card__delete-btn");
-  cardDeleteBtn.addEventListener("click", () => {
-    // Remove the card element from the DOM
-    const card = cardDeleteBtn.closest(".card");
-    card.remove();
+  //keeps showing like state
+  if (data.isLiked) {
+    cardLikeBtn.classList.add("card__like-btn_active");
+  }
+
+  cardLikeBtn.addEventListener("click", () => {
+    if (data.isLiked) {
+      // If the card is already liked, remove the like
+      api
+        .removeLike(data._id)
+        .then((res) => {
+          cardLikeBtn.classList.remove("card__like-btn_active");
+          data.isLiked = false; // Update the like state
+        })
+        .catch((err) => {
+          console.error("Error removing like:", err);
+        });
+    } else {
+      // If the card is not liked, add the like
+      api
+        .isLiked(data._id)
+        .then((res) => {
+          cardLikeBtn.classList.add("card__like-btn_active");
+        })
+        .catch((err) => {
+          console.error("Error adding like:", err);
+        });
+    }
   });
 
   cardImageEl.addEventListener("click", () => {
@@ -222,17 +257,40 @@ function getCardElement(data) {
     openPreviewModal(cardImageEl.src, caption);
   });
 
+  cardDeleteBtn.addEventListener("click", () => {
+    handleDeleteCard(data, cardElement);
+  });
+
+  function handleDeleteCard(data, cardElement) {
+    // Open the delete confirmation modal
+    cardToDelete = cardElement;
+    cardIdToDelete = data._id;
+    openModal(deleteModal);
+  }
+
   return cardElement;
 }
+
+function handleDeleteCardSubmit(evt) {
+  evt.preventDefault(); // Prevent the default form submission behavior
+  api
+    .deleteCard({ cardId: cardIdToDelete })
+    .then(() => {
+      // Remove the card from the DOM
+      cardToDelete.remove();
+      closeModal(deleteModal);
+    })
+    .catch((err) => {
+      console.error("Error deleting card:", err);
+    });
+}
+
+deleteForm.addEventListener("submit", handleDeleteCardSubmit);
 
 function renderCard(item, method = "append") {
   const cardElement = getCardElement(item);
   cardList[method](cardElement);
 }
-
-initialCards.forEach(function (item) {
-  renderCard(item);
-});
 
 function handleEscape(evt) {
   if (evt.key === "Escape") {
@@ -242,5 +300,4 @@ function handleEscape(evt) {
     }
   }
 }
-
 enableValidation(settings);

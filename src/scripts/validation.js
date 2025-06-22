@@ -1,5 +1,5 @@
 export const settings = {
-  formSelector: ".modal__container",
+  formSelector: ".modal__form ",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__submit-btn",
   inactiveButtonClass: "modal__submit-btn_disabled",
@@ -9,6 +9,7 @@ export const settings = {
 
 export const enableValidation = (config) => {
   const formList = document.querySelectorAll(config.formSelector);
+
   formList.forEach((formElement) => {
     setEventListeners(formElement, config);
   });

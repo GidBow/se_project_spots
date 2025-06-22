@@ -11,6 +11,9 @@
   width: 190px;
 }
 
+.avatar__edit-btn {
+}
+
 .profile__column {
   display: flex;
   flex-direction: column;
