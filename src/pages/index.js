@@ -1,21 +1,27 @@
 import "../pages/index.css";
 import logoSrc from "../images/logo.svg";
-import avatarSrc from "../images/avatar.jpg";
 import pencilSrc from "../images/pencil.svg";
+import pencilLSrc from "../images/pencil-light.svg";
 import plusSignSrc from "../images/plus-sign.svg";
-
 import { enableValidation, settings } from "../scripts/validation.js";
-import { initialCards } from "../scripts/cards.js";
 import { disableButton, resetValidation } from "../scripts/validation.js";
-
-import Api from "../scripts/Api.js";
+import {
+  renderLoading,
+  openModal,
+  closeModal,
+  handleSubmit,
+  handleEscape,
+  closeButtons,
+} from "../utils/helpers.js";
+import Api from "../utils/Api.js";
 
 const logoImage = document.getElementById("logo");
 logoImage.src = logoSrc;
 const avatarImage = document.getElementById("avatar");
-avatarImage.src = avatarSrc;
 const pencilImage = document.getElementById("pencil");
 pencilImage.src = pencilSrc;
+const pencilLImage = document.getElementById("pencil-light");
+pencilLImage.src = pencilLSrc;
 const plusSignImage = document.getElementById("plus-sign");
 plusSignImage.src = plusSignSrc;
 
@@ -50,11 +56,23 @@ const cardSubmitBtn = addCardFormElement.querySelector(".modal__submit-btn");
 const profileNameEL = document.querySelector(".profile__name");
 const profileDescriptionEL = document.querySelector(".profile__description");
 //preview modal elements
-
 const previewImageModal = document.querySelector("#preview-modal");
 const previewImage = previewImageModal.querySelector(".modal__preview-image");
 const previewCaption = previewImageModal.querySelector(".modal__caption");
 const previewCloseBtn = previewImageModal.querySelector(".modal__close-btn");
+//Avatar elements
+const editAvatarBtn = document.querySelector(".profile__avatar-btn");
+const avatarForm = document.querySelector(".modal__avatar-form");
+const editAvatarModal = document.querySelector("#edit-avatar-modal");
+const avatarSubmitBtn = editAvatarModal.querySelector(".modal__submit-btn");
+const avatarLinkInput = editAvatarModal.querySelector("#avatar-image-link");
+const avatarURL = editAvatarModal.querySelector(".modal__input");
+//Delete elements
+const deleteModal = document.querySelector("#delete-card-modal");
+const deleteForm = document.forms["delete-conf-form"];
+const deleteConfBtn = deleteForm.querySelector(".modal__delete-btn");
+let cardToDelete;
+let cardIdToDelete;
 
 const api = new Api({
   baseUrl: "https://around-api.en.tripleten-services.com/v1",
@@ -81,33 +99,35 @@ api
   .then((cards) => {
     // Render the initial cards
     cards.forEach((card) => {
-      renderCard(card);
+      renderCard(card, "append");
     });
   })
   .catch((err) => {
     console.error("Error fetching initial cards:", err);
   });
 
-// Function to open the modal
-function openModal(modal) {
-  modal.classList.add("modal_opened");
-  document.addEventListener("keydown", handleEscape);
-}
-// Function to close the modal
-function closeModal(modal) {
-  modal.classList.remove("modal_opened");
-  document.removeEventListener("keydown", handleEscape);
-}
-
-// Find all close buttons
-const closeButtons = document.querySelectorAll(".modal__close-btn");
-
-closeButtons.forEach((button) => {
-  // Find the closest popup only once
-  const popup = button.closest(".modal");
-  // Set the listener
-  button.addEventListener("click", () => closeModal(popup));
+//open avatar modal
+editAvatarBtn.addEventListener("click", function () {
+  openModal(editAvatarModal);
 });
+
+const handleAvatarFormSubmit = (e) => {
+  e.preventDefault();
+  const makeRequest = () => {
+    return api
+      .updateUserAvatar({ avatar: avatarLinkInput.value })
+      .then((avatar) => {
+        avatarImage.src = avatar.avatar;
+        avatarForm.reset();
+        closeModal(editAvatarModal);
+      });
+  };
+
+  handleSubmit(makeRequest, e);
+};
+
+//Avatar submit button
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 // Open the modal when the button is clicked
 editProfileBtn.addEventListener("click", function () {
@@ -115,7 +135,6 @@ editProfileBtn.addEventListener("click", function () {
   editProfileNameInput.value = profileNameEL.textContent;
   editProfileDescriptionInput.value = profileDescriptionEL.textContent;
   resetValidation(editProfileForm, settings);
-  // Open the modal
   openModal(editProfileModal);
 });
 
@@ -132,50 +151,50 @@ newPostModal.addEventListener("mousedown", (evt) => {
 });
 
 // Assign form input values to profile name and description
-function handleEditProfileSubmit(e) {
-  e.preventDefault(); // Prevent the default form submission behavior
-  api
-    .updateUserInfo(
-      editProfileNameInput.value,
-      editProfileDescriptionInput.value
-    )
-    .then((value) => {
-      profileNameEL.textContent = editProfileNameInput.value;
-      profileDescriptionEL.textContent = editProfileDescriptionInput.value;
+const handleProfileFormSubmit = (e) => {
+  e.preventDefault();
+  const makeRequest = () => {
+    return api
+      .updateUserInfo({
+        name: editProfileNameInput.value,
+        about: editProfileDescriptionInput.value,
+      })
+      .then(() => {
+        profileNameEL.textContent = editProfileNameInput.value;
+        profileDescriptionEL.textContent = editProfileDescriptionInput.value;
 
-      disableButton(
-        editProfileForm.querySelector(".modal__submit-btn"),
-        settings
-      ); // Disable the submit button
+        disableButton(
+          editProfileForm.querySelector(".modal__submit-btn"),
+          settings
+        ); // Disable the submit button
 
-      closeModal(editProfileModal); // Close the modal
-    })
-    .catch((err) => {
-      console.error("Error updating user info:", err);
-    });
+        closeModal(editProfileModal); // Close the modal
+      });
+  };
+
+  handleSubmit(makeRequest, e);
+};
+
+editProfileForm.addEventListener("submit", handleProfileFormSubmit);
+
+function handleAddCardSubmit(e) {
+  e.preventDefault();
+  const makeRequest = () => {
+    return api
+      .addNewCard({ name: captionInput.value, link: linkInput.value })
+      .then((data) => {
+        // Render the new card
+        renderCard(data);
+        addCardFormElement.reset();
+        disableButton(cardSubmitBtn, settings);
+        closeModal(newPostModal);
+      });
+  };
+  handleSubmit(makeRequest, e);
 }
 
-editProfileForm.addEventListener("submit", handleEditProfileSubmit);
-
-function handleAddCardSubmit(evt) {
-  // Prevent default browser behavior.
-  evt.preventDefault();
-  api
-    .addNewCard({ name: captionInput.value, link: linkInput.value })
-    .then((data) => {
-      // Render the new card
-      renderCard(data);
-      addCardFormElement.reset();
-      disableButton(cardSubmitBtn, settings);
-      closeModal(newPostModal);
-    })
-    .catch((err) => {
-      console.error("Error adding new card", err);
-    });
-}
-
-editProfileModal.addEventListener("mousedown", (evt) => {
-  if (evt.target.classList.contains("modal")) {
+editProfileModal.addEventListener("mousedown", (e) => {
+  if (e.target.classList.contains("modal")) {
     closeModal(editProfileModal);
   }
 });
@@ -183,8 +202,8 @@ editProfileModal.addEventListener("mousedown", (evt) => {
 // Add event listener to the add card form
 addCardFormElement.addEventListener("submit", handleAddCardSubmit);
 
-previewImageModal.addEventListener("mousedown", (evt) => {
-  if (evt.target.classList.contains("modal")) {
+previewImageModal.addEventListener("mousedown", (e) => {
+  if (e.target.classList.contains("modal")) {
     closeModal(previewImageModal);
   }
 });
@@ -196,13 +215,6 @@ function openPreviewModal(image, caption) {
   previewCaption.textContent = caption;
   openModal(previewImageModal);
 }
-
-const deleteModal = document.querySelector("#delete-card-modal");
-
-const deleteForm = document.forms["delete-conf-form"];
-const deleteConfBtn = deleteForm.querySelector(".modal__delete-btn");
-let cardToDelete;
-let cardIdToDelete;
 
 function getCardElement(data) {
   // Find the elements inside the template
@@ -216,8 +228,8 @@ function getCardElement(data) {
   cardImageEl.alt = data.name;
   cardTitleEl.textContent = data.name;
 
-  previewImageModal.addEventListener("mousedown", (evt) => {
-    if (evt.target.classList.contains("modal")) {
+  previewImageModal.addEventListener("mousedown", (e) => {
+    if (e.target.classList.contains("modal")) {
       closeModal(previewImageModal);
     }
   });
@@ -231,10 +243,10 @@ function getCardElement(data) {
     if (data.isLiked) {
       // If the card is already liked, remove the like
       api
-        .removeLike(data._id)
-        .then((res) => {
-          cardLikeBtn.classList.remove("card__like-btn_active");
-          data.isLiked = false; // Update the like state
+        .removeLike({ cardId: data._id })
+        .then(() => {
+          cardLikeBtn.classList.toggle("card__like-btn_active");
+          // data.isLiked = false; // Update the like state
         })
         .catch((err) => {
           console.error("Error removing like:", err);
@@ -242,9 +254,9 @@ function getCardElement(data) {
     } else {
       // If the card is not liked, add the like
       api
-        .isLiked(data._id)
-        .then((res) => {
-          cardLikeBtn.classList.add("card__like-btn_active");
+        .isLiked({ cardId: data._id })
+        .then(() => {
+          cardLikeBtn.classList.toggle("card__like-btn_active");
         })
         .catch((err) => {
           console.error("Error adding like:", err);
@@ -267,37 +279,25 @@ function getCardElement(data) {
     cardIdToDelete = data._id;
     openModal(deleteModal);
   }
-
   return cardElement;
 }
 
-function handleDeleteCardSubmit(evt) {
-  evt.preventDefault(); // Prevent the default form submission behavior
-  api
-    .deleteCard({ cardId: cardIdToDelete })
-    .then(() => {
+function handleDeleteCardSubmit(e) {
+  e.preventDefault(); // Prevent the default form submission behavior
+  const makeRequest = () => {
+    return api.deleteCard({ cardId: cardIdToDelete }).then(() => {
       // Remove the card from the DOM
       cardToDelete.remove();
       closeModal(deleteModal);
-    })
-    .catch((err) => {
-      console.error("Error deleting card:", err);
     });
+  };
+  handleSubmit(makeRequest, e, "Deleteing...");
 }
 
 deleteForm.addEventListener("submit", handleDeleteCardSubmit);
 
-function renderCard(item, method = "append") {
+function renderCard(item, method = "prepend") {
   const cardElement = getCardElement(item);
   cardList[method](cardElement);
-}
-
-function handleEscape(evt) {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".modal_opened");
-    if (openedPopup) {
-      closeModal(openedPopup);
-    }
-  }
 }
 enableValidation(settings);

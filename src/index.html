@@ -17,13 +17,15 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <img id="avatar" alt="" class="profile__avatar" />
-          <button type="button" class="avatar__edit-btn">
-            <img id="pencil" alt="pencil icon" /> Edit Avatar
-          </button>
+          <div class="profile__avatar-container">
+            <button type="button" class="profile__avatar-btn">
+              <img id="pencil-light" alt="pencil icon" />
+            </button>
+            <img id="avatar" alt="" class="profile__avatar" />
+          </div>
           <div class="profile__column">
-            <h1 class="profile__name">Bessie Coleman</h1>
-            <p class="profile__description">Civil Aviator</p>
+            <h1 class="profile__name"></h1>
+            <p class="profile__description"></p>
             <button type="button" class="profile__edit-btn">
               <img id="pencil" alt="pencil icon" /> Edit Profile
             </button>
@@ -111,12 +113,12 @@
             class="modal__close-btn"
           ></button>
           <h2 class="modal__title">Edit profile avatar</h2>
-          <form name="edit-avatar" class="modal__form" novalidate>
-            <label for="image-link" class="modal__label">
+          <form name="edit-avatar" class="modal__avatar-form" novalidate>
+            <label for="avatar-image-link" class="modal__label">
               Profile Picture
               <input
                 required
-                id="image-link"
+                id="avatar-image-link"
                 type="url"
                 class="modal__input"
                 placeholder="Paste the link to an image"
@@ -182,30 +184,10 @@
           </h2>
           <form class="modal__form" name="delete-conf-form">
             <button type="submit" class="modal__submit-btn modal__delete-btn">
-              Please delete already
+              Delete
             </button>
             <button type="button" class="modal__cancel-btn">Cancel</button>
           </form>
-        </div>
-      </div>
-      <div class="modal" id="error-modal">
-        <div class="modal__container">
-          <button
-            aria-label="close modal"
-            type="button"
-            class="modal__close-btn"
-          ></button>
-          <h2 class="modal__title">Error</h2>
-          <p class="modal__text">Something went wrong. Please try again.</p>
-        </div>
-        <div class="editProfileAvatar__container">
-          <button type="button" class="editProfileAvatar__button"></button>
-        </div>
-      </div>
-      <div class="modal" id="loading-modal">
-        <div class="modal__container">
-          <h2 class="modal__title">Loading...</h2>
-          <div class="modal__spinner"></div>
         </div>
       </div>
     </div>
