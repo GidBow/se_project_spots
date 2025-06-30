@@ -1,4 +1,4 @@
-export const renderLoading = (
+const renderLoading = (
   isLoading,
   button,
   buttonText = "Save",
@@ -41,7 +41,7 @@ export const handleSubmit = (request, e, loadingText = "Saving...") => {
     });
 };
 
-export function handleEscape(evt) {
+function handleEscape(evt) {
   if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".modal_opened");
     if (openedPopup) {
@@ -50,11 +50,16 @@ export function handleEscape(evt) {
   }
 }
 
-export const closeButtons = document
-  .querySelectorAll(".modal__close-btn")
-  .forEach((button) => {
-    // Find the closest popup only once
-    const popup = button.closest(".modal");
-    // Set the listener
-    button.addEventListener("click", () => closeModal(popup));
+export const setModalEventListeners = () => {
+  const modals = document.querySelectorAll(".modal");
+  modals.forEach((modal) => {
+    modal.addEventListener("mousedown", (e) => {
+      if (
+        e.target === modal ||
+        e.target.classList.contains("modal__close-btn")
+      ) {
+        closeModal(modal);
+      }
+    });
   });
+};

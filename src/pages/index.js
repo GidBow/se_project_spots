@@ -6,12 +6,10 @@ import plusSignSrc from "../images/plus-sign.svg";
 import { enableValidation, settings } from "../scripts/validation.js";
 import { disableButton, resetValidation } from "../scripts/validation.js";
 import {
-  renderLoading,
   openModal,
   closeModal,
   handleSubmit,
-  handleEscape,
-  closeButtons,
+  setModalEventListeners,
 } from "../utils/helpers.js";
 import Api from "../utils/Api.js";
 
@@ -117,12 +115,12 @@ const handleAvatarFormSubmit = (e) => {
     return api
       .updateUserAvatar({ avatar: avatarLinkInput.value })
       .then((avatar) => {
+        console.log(avatar);
         avatarImage.src = avatar.avatar;
         avatarForm.reset();
         closeModal(editAvatarModal);
       });
   };
-
   handleSubmit(makeRequest, e);
 };
 
@@ -141,13 +139,6 @@ editProfileBtn.addEventListener("click", function () {
 // Open the modal when the button is clicked
 newPostBtn.addEventListener("click", function () {
   openModal(newPostModal);
-});
-
-// For the new post modal overlay click
-newPostModal.addEventListener("mousedown", (evt) => {
-  if (evt.target.classList.contains("modal")) {
-    closeModal(newPostModal);
-  }
 });
 
 // Assign form input values to profile name and description
@@ -193,20 +184,8 @@ function handleAddCardSubmit(e) {
   handleSubmit(makeRequest, e);
 }
 
-editProfileModal.addEventListener("mousedown", (e) => {
-  if (e.target.classList.contains("modal")) {
-    closeModal(editProfileModal);
-  }
-});
-
 // Add event listener to the add card form
 addCardFormElement.addEventListener("submit", handleAddCardSubmit);
-
-previewImageModal.addEventListener("mousedown", (e) => {
-  if (e.target.classList.contains("modal")) {
-    closeModal(previewImageModal);
-  }
-});
 
 // Function to open the preview modal
 function openPreviewModal(image, caption) {
@@ -228,11 +207,7 @@ function getCardElement(data) {
   cardImageEl.alt = data.name;
   cardTitleEl.textContent = data.name;
 
-  previewImageModal.addEventListener("mousedown", (e) => {
-    if (e.target.classList.contains("modal")) {
-      closeModal(previewImageModal);
-    }
-  });
+  setModalEventListeners();
 
   //keeps showing like state
   if (data.isLiked) {
@@ -295,6 +270,9 @@ function handleDeleteCardSubmit(e) {
 }
 
 deleteForm.addEventListener("submit", handleDeleteCardSubmit);
+deleteForm.addEventListener("reset", () => {
+  closeModal(deleteModal);
+});
 
 function renderCard(item, method = "prepend") {
   const cardElement = getCardElement(item);
