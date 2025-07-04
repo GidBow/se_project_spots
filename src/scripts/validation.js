@@ -23,11 +23,6 @@ const setEventListeners = (formElement, config) => {
 
   toggleButtonState(inputList, buttonElement, config);
 
-  // Disable the button when the form is reset
-  formElement.addEventListener("reset", () => {
-    disableButton(buttonElement, config);
-  });
-
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
       checkInputValidity(formElement, inputElement, config);
@@ -66,7 +61,7 @@ export const disableButton = (buttonElement, config) => {
 
   buttonElement.disabled = true;
 };
-const enableButton = (buttonElement, config) => {
+export const enableButton = (buttonElement, config) => {
   buttonElement.disabled = false;
   //remove the disabled class
   buttonElement.classList.remove(config.inactiveButtonClass);

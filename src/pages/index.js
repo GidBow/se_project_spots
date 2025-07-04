@@ -4,7 +4,11 @@ import pencilSrc from "../images/pencil.svg";
 import pencilLSrc from "../images/pencil-light.svg";
 import plusSignSrc from "../images/plus-sign.svg";
 import { enableValidation, settings } from "../scripts/validation.js";
-import { disableButton, resetValidation } from "../scripts/validation.js";
+import {
+  enableButton,
+  disableButton,
+  resetValidation,
+} from "../scripts/validation.js";
 import {
   openModal,
   closeModal,
@@ -67,6 +71,8 @@ const avatarLinkInput = editAvatarModal.querySelector("#avatar-image-link");
 const avatarURL = editAvatarModal.querySelector(".modal__input");
 //Delete elements
 const deleteModal = document.querySelector("#delete-card-modal");
+const cardElement = cardTemplate.querySelector(".card");
+const cardDeleteBtn = cardElement.querySelector(".card__delete-btn");
 const deleteForm = document.forms["delete-conf-form"];
 const deleteConfBtn = deleteForm.querySelector(".modal__delete-btn");
 let cardToDelete;
@@ -115,9 +121,7 @@ const handleAvatarFormSubmit = (e) => {
     return api
       .updateUserAvatar({ avatar: avatarLinkInput.value })
       .then((avatar) => {
-        console.log(avatar);
         avatarImage.src = avatar.avatar;
-        avatarForm.reset();
         closeModal(editAvatarModal);
       });
   };
@@ -154,11 +158,7 @@ const handleProfileFormSubmit = (e) => {
         profileNameEL.textContent = editProfileNameInput.value;
         profileDescriptionEL.textContent = editProfileDescriptionInput.value;
 
-        disableButton(
-          editProfileForm.querySelector(".modal__submit-btn"),
-          settings
-        ); // Disable the submit button
-
+        disableButton(e.submitter, settings); // Disable the submit button
         closeModal(editProfileModal); // Close the modal
       });
   };
@@ -176,7 +176,6 @@ function handleAddCardSubmit(e) {
       .then((data) => {
         // Render the new card
         renderCard(data);
-        addCardFormElement.reset();
         disableButton(cardSubmitBtn, settings);
         closeModal(newPostModal);
       });
@@ -221,7 +220,6 @@ function getCardElement(data) {
         .removeLike({ cardId: data._id })
         .then(() => {
           cardLikeBtn.classList.toggle("card__like-btn_active");
-          // data.isLiked = false; // Update the like state
         })
         .catch((err) => {
           console.error("Error removing like:", err);

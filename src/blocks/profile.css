@@ -136,6 +136,10 @@
 
   .profile__avatar-btn {
     visibility: visible;
+    background: none;
+    justify-content: right;
+    padding-bottom: 20px;
+    padding-right: 0;
   }
 
   .profile__avatar-btn::after {

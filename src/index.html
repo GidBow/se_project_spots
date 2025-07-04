@@ -113,7 +113,11 @@
             class="modal__close-btn"
           ></button>
           <h2 class="modal__title">Edit profile avatar</h2>
-          <form name="edit-avatar" class="modal__avatar-form" novalidate>
+          <form
+            name="edit-avatar"
+            class="modal__form modal__avatar-form"
+            novalidate
+          >
             <label for="avatar-image-link" class="modal__label">
               Profile Picture
               <input
@@ -123,7 +127,10 @@
                 class="modal__input"
                 placeholder="Paste the link to an image"
               />
-              <span id="image-link-error" class="modal__input-error"></span>
+              <span
+                id="avatar-image-link-error"
+                class="modal__input-error"
+              ></span>
             </label>
             <button type="submit" class="modal__submit-btn">Save</button>
           </form>
