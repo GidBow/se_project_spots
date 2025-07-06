@@ -1,5 +1,5 @@
-const settings = {
-  formSelector: ".modal__container",
+export const settings = {
+  formSelector: ".modal__form ",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__submit-btn",
   inactiveButtonClass: "modal__submit-btn_disabled",
@@ -7,8 +7,9 @@ const settings = {
   errorClass: "modal__error_visible",
 };
 
-const enableValidation = (config) => {
+export const enableValidation = (config) => {
   const formList = document.querySelectorAll(config.formSelector);
+
   formList.forEach((formElement) => {
     setEventListeners(formElement, config);
   });
@@ -21,11 +22,6 @@ const setEventListeners = (formElement, config) => {
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
   toggleButtonState(inputList, buttonElement, config);
-
-  // Disable the button when the form is reset
-  formElement.addEventListener("reset", () => {
-    disableButton(buttonElement, config);
-  });
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
@@ -59,19 +55,19 @@ function toggleButtonState(inputList, buttonElement, config) {
   }
 }
 
-const disableButton = (buttonElement, config) => {
+export const disableButton = (buttonElement, config) => {
   //add a modifier class the buttonElement and make it grey dont forget css
   buttonElement.classList.add(config.inactiveButtonClass);
 
   buttonElement.disabled = true;
 };
-const enableButton = (buttonElement, config) => {
+export const enableButton = (buttonElement, config) => {
   buttonElement.disabled = false;
   //remove the disabled class
   buttonElement.classList.remove(config.inactiveButtonClass);
 };
 
-const resetValidation = (formElement, config) => {
+export const resetValidation = (formElement, config) => {
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputSelector)
   );
